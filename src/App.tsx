@@ -1,7 +1,24 @@
-import { usePoseLandMarkerStore } from "./services/PoseLandMarkerState/pose/store.ts";
+import React from 'react';
+import {
+  poseLandMarker,
+  usePoseLandMarkerStore,
+} from './services/PoseLandMarker';
 
 function App() {
+  const mounted = React.useRef(false);
   const isReady = usePoseLandMarkerStore((state) => state.isReady);
+
+  React.useEffect(() => {
+    if (mounted.current) {
+      return;
+    }
+
+    mounted.current = true;
+
+    (async () => {
+      poseLandMarker.init();
+    })();
+  }, []);
 
   return (
     <>
@@ -12,7 +29,7 @@ function App() {
       >
         Set
       </button>
-      {isReady ? "Ready" : "Not Ready"}
+      {isReady ? 'Ready' : 'Not Ready'}
     </>
   );
 }
