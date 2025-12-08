@@ -18,6 +18,14 @@ export const WebCam: React.FC = () => {
   const lastVideoTime = React.useRef<number>(-1);
 
   const predictWebcam = () => {
+    if (!poseCanvas.current) {
+      poseCanvas.current = new PoseCanvas(
+        canvasRef.current!,
+        videoRef.current!.clientWidth,
+        videoRef.current!.clientHeight,
+      );
+    }
+
     let startTimeMs = performance.now();
     if (lastVideoTime.current !== videoRef.current!.currentTime) {
       lastVideoTime.current = videoRef.current!.currentTime;
@@ -41,12 +49,6 @@ export const WebCam: React.FC = () => {
       });
 
       videoRef.current!.addEventListener('loadeddata', predictWebcam);
-
-      poseCanvas.current = new PoseCanvas(
-        canvasRef.current!,
-        videoRef.current!.clientWidth,
-        videoRef.current!.clientHeight,
-      );
     })();
   }, []);
 
